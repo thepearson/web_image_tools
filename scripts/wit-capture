@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+import sys
+import argparse
+
+try:
+  import wit
+except ImportError:
+  print "wit module missing from path"
+  sys.exit(1)
+
+def main(args):
+  if not args.src:
+    print "Source URL missing"
+    sys.exit(1)
+
+  if not args.dst:
+    print "Destination file missing"
+    sys.exit(1)
+
+  width = None;
+  if args.width is not None:
+    width = int(args.width)
+
+  height = None;
+  if args.height is not None:
+    height = int(args.height)
+
+  wit.grab(args.src, args.dst, width, height)
+
+if __name__ == '__main__':
+
+  parser = argparse.ArgumentParser(description='Capture a screenshot from a web page.')
+  parser.add_argument("-w", "--width", help="Specify window width")
+  parser.add_argument("-H", "--height", help="Specify window height")
+
+  parser.add_argument("src", help="Source web page to capture")
+  parser.add_argument("dst", help="Destination file to save to")
+  args = parser.parse_args()
+  sys.exit(main(args))

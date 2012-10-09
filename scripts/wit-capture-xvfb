@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# specify some defaults
+SOURCE=
+OUTFILE=out.png
+DIMENSIONS=1024
+WIDTH=
+HEIGHT=
+
+# determine exec
+XVFB_RUN=`which xvfb-run`
+WIT_CAPTURE=`which wit-capture`
+
+# usage
+usage() {
+  cat << EOF
+usage: $0 [source url] [out.png]
+
+This script will capture a screenshot of a given web page and save a copy of
+it as out.png.
+
+OPTIONS:
+   -s      Source URL, web site to capture
+
+OPTIONAL:
+   -h      Show this message
+   -o      Output PNG, [defaults to out.png]
+   -d      Dimensions W[xH] (eg 1024x768, 1024)
+
+EOF
+}
+
+# set up opts
+while getopts “hd:s:o:” OPTION
+do
+  case $OPTION in
+    h)
+      usage
+      exit 1
+      ;;
+    d)
+      DIMENSIONS=$OPTARG
+      ;;
+    o)
+      OUTFILE=$OPTARG
+      ;;
+    s)
+      SOURCE=$OPTARG
+      ;;
+    ?)
+      usage
+      exit
+      ;;
+  esac
+done
+
+if [ -z "$SOURCE" ]
+then
+  usage
+  exit 1
+fi
+
+if [ ! -z "$DIMENSIONS" ]
+then
+  if echo $DIMENSIONS | grep -qE 'x'; then
+    WIDTH=" --width="`echo $DIMENSIONS | awk -Fx '{print $1}'`
+    HEIGHT=" --height="`echo $DIMENSIONS | awk -Fx '{print $2}'`
+  else
+    WIDTH=" --width="$DIMENSIONS
+  fi
+fi
+
+${XVFB_RUN} --auto-servernum --server-args="-screen 0, 1360x768x24" ${WIT_CAPTURE} ${WIDTH} ${HEIGHT} ${SOURCE} ${OUTFILE}
