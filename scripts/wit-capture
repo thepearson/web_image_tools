@@ -25,13 +25,18 @@ def main(args):
   if args.height is not None:
     height = int(args.height)
 
-  wit.grab(args.src, args.dst, width, height)
+  browser = None;
+  if args.browser is not None:
+    browser = args.browser
+
+  wit.grab(args.src, args.dst, width, height, browser)
 
 if __name__ == '__main__':
 
   parser = argparse.ArgumentParser(description='Capture a screenshot from a web page.')
   parser.add_argument("-w", "--width", help="Specify window width")
   parser.add_argument("-H", "--height", help="Specify window height")
+  parser.add_argument("-b", "--browser", help="Specify browser, supported types [desktop|mobile]")
 
   parser.add_argument("src", help="Source web page to capture")
   parser.add_argument("dst", help="Destination file to save to")

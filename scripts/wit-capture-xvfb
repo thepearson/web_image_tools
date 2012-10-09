@@ -4,6 +4,7 @@
 SOURCE=
 OUTFILE=out.png
 DIMENSIONS=1024
+PLATFORM=" --browser=desktop"
 WIDTH=
 HEIGHT=
 
@@ -24,6 +25,7 @@ OPTIONS:
 
 OPTIONAL:
    -h      Show this message
+   -p      Platform (mobile|desktop), DEFAUTLS to desktop
    -o      Output PNG, [defaults to out.png]
    -d      Dimensions W[xH] (eg 1024x768, 1024)
 
@@ -31,7 +33,7 @@ EOF
 }
 
 # set up opts
-while getopts “hd:s:o:” OPTION
+while getopts “hd:s:o:p:” OPTION
 do
   case $OPTION in
     h)
@@ -46,6 +48,9 @@ do
       ;;
     s)
       SOURCE=$OPTARG
+      ;;
+    p)
+      PLATFORM=" --browser="$OPTARG
       ;;
     ?)
       usage
@@ -70,4 +75,4 @@ then
   fi
 fi
 
-${XVFB_RUN} --auto-servernum --server-args="-screen 0, 1360x768x24" ${WIT_CAPTURE} ${WIDTH} ${HEIGHT} ${SOURCE} ${OUTFILE}
+${XVFB_RUN} --auto-servernum --server-args="-screen 0, 1360x768x24" ${WIT_CAPTURE} ${WIDTH} ${HEIGHT} ${PLATFORM} ${SOURCE} ${OUTFILE}
