@@ -75,4 +75,4 @@ then
   fi
 fi
 
-${XVFB_RUN} --auto-servernum --server-args="-screen 0, 1360x768x24" ${WIT_CAPTURE} ${WIDTH} ${HEIGHT} ${PLATFORM} ${SOURCE} ${OUTFILE}
+${XVFB_RUN} --auto-servernum --server-args="-screen 1, 1360x768x24" ${WIT_CAPTURE} ${WIDTH} ${HEIGHT} ${PLATFORM} ${SOURCE} ${OUTFILE}

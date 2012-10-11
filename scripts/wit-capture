@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import sys
 import argparse
 
@@ -9,6 +10,7 @@ except ImportError:
   sys.exit(1)
 
 def main(args):
+
   if not args.src:
     print "Source URL missing"
     sys.exit(1)
@@ -36,9 +38,12 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Capture a screenshot from a web page.')
   parser.add_argument("-w", "--width", help="Specify window width")
   parser.add_argument("-H", "--height", help="Specify window height")
+  parser.add_argument("-d", "--display", help="Specify X display, :0, :1 etc")
   parser.add_argument("-b", "--browser", help="Specify browser, supported types [desktop|mobile]")
 
   parser.add_argument("src", help="Source web page to capture")
   parser.add_argument("dst", help="Destination file to save to")
   args = parser.parse_args()
+
+
   sys.exit(main(args))

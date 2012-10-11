@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export DISPLAY=':1'
+
+SCRIPT=`which wit-capture`
+VARS=$@
+
+$SCRIPT $VARS

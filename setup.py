@@ -58,7 +58,7 @@ def main():
         platforms='Platform Independent',
         license='License :: OSI Approved :: BSD License',
         packages=['wit'],
-        scripts = ["scripts/wit-capture", "scripts/wit-capture-xvfb"],
+        scripts = ["scripts/wit", "scripts/wit-capture", "scripts/wit-capture-xvfb"],
         classifiers=[
               'Development Status :: 5 - Production/Stable',
               'Environment :: Console',
