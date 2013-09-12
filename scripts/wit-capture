@@ -31,7 +31,11 @@ def main(args):
   if args.browser is not None:
     browser = args.browser
 
-  wit.grab(args.src, args.dst, width, height, browser)
+  delay = 0.0
+  if args.delay is not None:
+	delay = args.delay
+
+  wit.grab(args.src, args.dst, width, height, browser, delay)
 
 if __name__ == '__main__':
 
@@ -39,6 +43,7 @@ if __name__ == '__main__':
   parser.add_argument("-w", "--width", help="Specify window width")
   parser.add_argument("-H", "--height", help="Specify window height")
   parser.add_argument("-d", "--display", help="Specify X display, :0, :1 etc")
+  parser.add_argument("-D", "--delay", help="Specify a delay after page loads before taking a screenshot")
   parser.add_argument("-b", "--browser", help="Specify browser, supported types [desktop|mobile]")
 
   parser.add_argument("src", help="Source web page to capture")

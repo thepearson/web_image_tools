@@ -40,13 +40,15 @@ class DesktopBrowser(QWebPage):
 
 
 class Webshot(QObject):
-  def __init__(self, url=None, out=None, width=1024, height=None, browser=None):
+  sleep = 0.0
+  def __init__(self, url=None, out=None, width=1024, height=None, browser=None, sleep=0.5):
     QObject.__init__(self)
 
     if browser is None:
       browser = 'desktop'
 
     self.browser = browser
+    self.sleep = sleep
 
     if not url:
       quit()
@@ -96,6 +98,7 @@ class Webshot(QObject):
 
     self.view.resize(size)
     self.view.page().setViewportSize(size)
+    time.sleep(float(self.sleep))
 
     img = QImage(size, QImage.Format_ARGB32)
     paint = QPainter(img)
@@ -106,7 +109,7 @@ class Webshot(QObject):
     sys.exit(0)
 
 
-def grab(src, dst, width=None, height=None, browser='desktop'):
+def grab(src, dst, width=None, height=None, browser='desktop', sleep=0.5):
   """
   Wrapper around the class to easily GRAB an image
   when given a web page
@@ -114,7 +117,7 @@ def grab(src, dst, width=None, height=None, browser='desktop'):
   app = QApplication(sys.argv)
   signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-  t = Webshot(src, dst, width, height, browser)
+  t = Webshot(src, dst, width, height, browser, sleep)
   t.shot()
   return app.exec_()
 
