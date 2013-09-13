@@ -7,6 +7,7 @@ DIMENSIONS=1024
 PLATFORM=" --browser=desktop"
 WIDTH=
 HEIGHT=
+DELAY=0
 
 # determine exec
 XVFB_RUN=`which xvfb-run`
@@ -28,12 +29,13 @@ OPTIONAL:
    -p      Platform (mobile|desktop), DEFAUTLS to desktop
    -o      Output PNG, [defaults to out.png]
    -d      Dimensions W[xH] (eg 1024x768, 1024)
+   -D      Delay
 
 EOF
 }
 
 # set up opts
-while getopts “hd:s:o:p:” OPTION
+while getopts “hd:D:s:o:p:” OPTION
 do
   case $OPTION in
     h)
@@ -42,6 +44,9 @@ do
       ;;
     d)
       DIMENSIONS=$OPTARG
+      ;;
+    D)
+      DELAY=$OPTARG
       ;;
     o)
       OUTFILE=$OPTARG
@@ -75,4 +80,4 @@ then
   fi
 fi
 
-${XVFB_RUN} --auto-servernum --server-args="-screen 1, 1360x768x24" ${WIT_CAPTURE} ${WIDTH} ${HEIGHT} ${PLATFORM} ${SOURCE} ${OUTFILE}
+${XVFB_RUN} --auto-servernum --server-args="-screen 1, 1360x768x24" ${WIT_CAPTURE} --delay=${DELAY} ${WIDTH} ${HEIGHT} ${PLATFORM} ${SOURCE} ${OUTFILE}
