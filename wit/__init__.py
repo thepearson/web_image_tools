@@ -25,24 +25,34 @@ try:
   from PyQt4.QtCore import *
   from PyQt4.QtGui import *
   from PyQt4.QtWebKit import *
+
 except ImportError:
   print("Oh noes! you need to install some modules!")
   print("maybe try? 'sudo apt-get install python-qt4 libqt4-webkit'")
   sys.exit(1)
 
-class MobileBrowser(QWebPage):
+
+class WitBrowser(QWebPage):
+  def __init__(self, width = None, height = None):
+    QWebPage.__init__(self)
+    size = QSize(width if width else 1600, height if height else 10000);
+    self.setViewportSize(size)
+
+
+class MobileBrowser(WitBrowser):
   def userAgentForUrl(self, url):
     return "Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
 
-class DesktopBrowser(QWebPage):
+
+class DesktopBrowser(WitBrowser):
   def userAgentForUrl(self, url):
     return "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.4 (KHTML, like Gecko) Chrome/22.0.1229.79 Safari/537.4";
 
 
-class Webshot(QObject):
+class Webshot(QWidget):
   sleep = 0.0
   def __init__(self, url=None, out=None, width=1024, height=None, browser=None, sleep=0.5):
-    QObject.__init__(self)
+    QWidget.__init__(self)
 
     if browser is None:
       browser = 'desktop'
@@ -55,7 +65,7 @@ class Webshot(QObject):
     self.url = url
 
     if not out:
-      out = "web2png.%i.png"%int(time.time())
+      out = "web2png.%i.png" % int(time.time())
 
     self.out = out
     self.view = None
@@ -65,12 +75,15 @@ class Webshot(QObject):
 
   def shot(self):
     self.view = QWebView()
+    self.view.showMaximized()
 
     if self.browser is not None:
       if self.browser == 'desktop':
-        self.view.setPage(DesktopBrowser())
+        browser = DesktopBrowser(self.width, self.height)
       else:
-        self.view.setPage(MobileBrowser())
+        browser = MobileBrowser(self.width, self.height)
+
+      self.view.setPage(browser)
 
     self.view.load(QUrl(self.url))
     self.view.show()
@@ -96,7 +109,6 @@ class Webshot(QObject):
     else:
       size.setHeight(size.height())
 
-    self.view.resize(size)
     self.view.page().setViewportSize(size)
     time.sleep(float(self.sleep))
 
@@ -110,10 +122,8 @@ class Webshot(QObject):
 
 
 def grab(src, dst, width=None, height=None, browser='desktop', sleep=0.5):
-  """
-  Wrapper around the class to easily GRAB an image
-  when given a web page
-  """
+  """ Wrapper around the class to easily GRAB an image
+  when given a web page """
   app = QApplication(sys.argv)
   signal.signal(signal.SIGINT, signal.SIG_DFL)
 
